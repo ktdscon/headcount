@@ -213,7 +213,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
     $('sOpen').textContent = (state.rows.length - go) + '개';
     if (data.generatedAt){
       var g = new Date(data.generatedAt);
-      if (!isNaN(g)) $('sAt').textContent = (g.getMonth()+1) + '.' + g.getDate() + ' ' + String(g.getHours()).padStart(2,'0') + ':' + String(g.getMinutes()).padStart(2,'0') + ' 조회';
+      if (!isNaN(g)) $('sAt').textContent = (g.getMonth()+1) + '.' + g.getDate() + ' (' + DOW[g.getDay()] + ') ' + String(g.getHours()).padStart(2,'0') + ':' + String(g.getMinutes()).padStart(2,'0') + ' 조회';
     }
     $('note').textContent = fromCache ? '최신 정보를 불러오는 중…' : '';
     $('note').className = '';

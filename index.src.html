@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>교육 신청인원 현황 | kt ds 컨소시엄</title>
+<meta name="description" content="kt ds 컨소시엄 협력사 교육 과정별 신청인원과 개강 확정 여부">
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+<style>
+:root{--red:#E5002B;--red-d:#C40025;--ink:#18171C;--gray:#707078;--box:#F4F4F6;--line:#E4E4E8;--ok:#0A7B4B;--ok-bg:#E6F4EC}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#fff;color:var(--ink);font-family:Pretendard,'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',Arial,sans-serif;font-size:16px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+.top{display:flex;align-items:center;justify-content:space-between;height:64px}
+.top img{display:block;width:160px;height:auto}
+.top a{font-size:14px;font-weight:600;text-decoration:none}
+.top a:hover{text-decoration:underline}
+.hero{background:var(--ink);color:#fff;padding:40px 0 36px}
+.kicker{margin:0 0 8px;font-size:14px;font-weight:700;color:#FF5C78}
+h1{margin:0 0 10px;font-size:34px;line-height:1.3;letter-spacing:-.02em}
+.lead{margin:0;font-size:17px;color:#E4E4E8}
+.lead b{color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:26px;background:#3A393F;border:1px solid #3A393F;border-radius:10px;overflow:hidden;max-width:620px}
+.stat{background:#232228;padding:14px 18px}
+.stat small{display:block;color:#B4B4BB;font-size:13px}
+.stat b{display:block;font-size:26px;line-height:1.3}
+.stat b.sm{font-size:15px;line-height:1.5;padding-top:6px;font-weight:600}
+.stat.go b{color:#FF7A90}
+.controls{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line)}
+.controls .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-top:14px;padding-bottom:14px}
+.search{flex:1 1 260px;position:relative}
+.search input{width:100%;font:inherit;font-size:15px;padding:10px 14px 10px 38px;border:1px solid #C9C9CE;border-radius:8px;outline:none}
+.search input:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(24,23,28,.12)}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:14px;padding:7px 13px;border:1px solid #C9C9CE;border-radius:999px;background:#fff;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip.go[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
+main{padding:8px 0 40px}
+.meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0 6px;font-size:13px;color:var(--gray)}
+.meta .warn{color:var(--red-d);font-weight:600}
+.list{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.row{display:grid;grid-template-columns:118px 1fr 190px 92px;gap:18px;align-items:center;padding:16px 4px;border-bottom:1px solid var(--line)}
+.when b{display:block;font-size:17px;line-height:1.35}
+.when span{font-size:13px;color:var(--gray)}
+.name{min-width:0}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:1px 7px;border-radius:4px;background:var(--box);color:#4A4A52;margin-right:6px;vertical-align:2px}
+.tag.n{background:#ECEBFA;color:#3C3A8F}.tag.w{background:#FFF1E0;color:#8A4B00}
+.name a{font-weight:700;font-size:16.5px;line-height:1.45;text-decoration:none}
+.name a:hover{text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:4px}
+.name a .arr{color:var(--red);font-weight:700;margin-left:4px;white-space:nowrap}
+.name .plain{font-weight:700;font-size:16.5px;line-height:1.45}
+.meter .num{display:flex;justify-content:space-between;font-size:13px;color:var(--gray);margin-bottom:5px}
+.meter .num b{font-size:17px;color:var(--ink)}
+.bar{height:6px;background:var(--box);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:#9A9AA2;border-radius:3px}
+.row.go .bar i{background:var(--red)}
+.need{margin-top:4px;font-size:12.5px;color:var(--gray)}
+.pill{display:inline-block;width:100%;text-align:center;font-size:13px;font-weight:700;padding:5px 0;border-radius:999px;border:1px solid var(--line);color:#4A4A52;background:#fff}
+.pill.soon{background:#FFF7E0;border-color:#F0D58A;color:#7A5A00}
+.row.go .pill{background:var(--red);border-color:var(--red);color:#fff}
+.empty,.loading{padding:48px 8px;text-align:center;color:var(--gray)}
+.sk{height:74px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,#fff 0,var(--box) 40%,#fff 80%);background-size:200% 100%;animation:sh 1.2s infinite linear}
+@keyframes sh{to{background-position:-200% 0}}
+.cta{margin-top:28px;padding:24px;background:var(--box);border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.cta p{margin:0;font-size:15px}
+.btn{display:inline-block;padding:12px 22px;border-radius:6px;background:var(--red);color:#fff;font-weight:700;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--red-d)}
+footer{padding:24px 0 40px;font-size:13px;color:var(--gray)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005fcc;outline-offset:3px}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .top img{width:132px}
+  .hero{padding:28px 0 26px}
+  h1{font-size:26px}
+  .lead{font-size:15px}
+  .stats{margin-top:20px}
+  .stat{padding:12px 12px}.stat b{font-size:22px}.stat b.sm{font-size:13px}
+  .row{grid-template-columns:1fr 84px;gap:8px 12px;padding:14px 2px}
+  .when{grid-column:1/-1;display:flex;gap:8px;align-items:baseline}
+  .when b{font-size:15px;display:inline}
+  .name{grid-column:1/-1}
+  .meter{grid-column:1/2}
+  .status{grid-column:2/3}
+  .cta{padding:18px}
+}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}}
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <a href="https://ktdscon.github.io/edu/" aria-label="kt ds 컨소시엄 교육 안내"><img src="https://ktdscon.github.io/edu/assets/logo.png" alt="kt ds University" width="160" height="34"></a>
+  <a href="https://edu.ktdsuniversity.com/lecture/list.action" target="_blank" rel="noopener">수강신청 사이트 ↗</a>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="kicker">kt ds 컨소시엄 · 협력사 재직자 무료 교육</p>
+    <h1>교육 신청인원 현황</h1>
+    <p class="lead"><b>10명 이상 신청하면 개강</b>합니다. 과정명을 누르면 교육 상세 안내로 이동합니다.</p>
+    <div class="stats" aria-live="polite">
+      <div class="stat go"><small>개강 확정</small><b id="sGo">–</b></div>
+      <div class="stat"><small>모집 중</small><b id="sOpen">–</b></div>
+      <div class="stat"><small>데이터 기준</small><b class="sm" id="sAt">매일 오전 10시 갱신</b></div>
+    </div>
+  </div>
+</section>
+
+<div class="controls">
+  <div class="wrap">
+    <label class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="q" type="search" placeholder="과정명으로 찾기 (예: AI, Azure, 보안)" aria-label="과정명 검색" autocomplete="off">
+    </label>
+    <div class="chips" role="group" aria-label="교육 시간대">
+      <button class="chip" data-type="" aria-pressed="true">전체</button>
+      <button class="chip" data-type="주간" aria-pressed="false">주간</button>
+      <button class="chip" data-type="야간" aria-pressed="false">야간</button>
+      <button class="chip" data-type="주말" aria-pressed="false">주말</button>
+      <button class="chip go" id="onlyGo" aria-pressed="false">개강 확정만</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="meta"><span id="count"></span><span id="note"></span></div>
+  <ul class="list" id="list" aria-busy="true">
+    <li class="sk"></li><li class="sk"></li><li class="sk"></li><li class="sk"></li><li class="sk"></li>
+  </ul>
+  <div class="cta">
+    <p>신청은 kt ds University 수강신청 사이트에서 합니다.</p>
+    <a class="btn" href="https://edu.ktdsuniversity.com/lecture/list.action" target="_blank" rel="noopener">수강신청 사이트 바로가기</a>
+  </div>
+</main>
+
+<footer class="wrap">
+  신청인원은 매일 오전 10시에 갱신되며 실제 접수 현황과 차이가 있을 수 있습니다. 문의 <a href="mailto:hongeun.lee@kt.com">hongeun.lee@kt.com</a>
+</footer>
+
+<script>
+(function(){
+  var API = 'https://script.google.com/macros/s/AKfycbz2xIYnBVhluoezElT3CZhP_GQvmfIDiH4t19pTGMBfYFnRdfnpfUw7WkETuxQFzqa-fA/exec?format=json';
+  var DETAIL = 'https://ktdscon.github.io/edu/courses/course-';
+  var GOAL = 10;
+  var MAP = __MAP__;
+  var LS = 'headcount_cache_v2';
+  var DOW = ['일','월','화','수','목','금','토'];
+
+  var state = { q:'', type:'', onlyGo:false, rows:[] };
+  var $ = function(id){ return document.getElementById(id); };
+
+  function norm(t){ return String(t).replace(/^\((주간|야간|주말)\)\s*/,'').replace(/[^0-9A-Za-z가-힣]/g,'').toLowerCase(); }
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function parse(d){ var m = String(d||'').match(/(\d{4})\D(\d{1,2})\D(\d{1,2})/); return m ? new Date(+m[1], m[2]-1, +m[3]) : null; }
+  function md(d){ return (d.getMonth()+1)+'.'+String(d.getDate()).padStart(2,'0')+' ('+DOW[d.getDay()]+')'; }
+
+  function prep(c){
+    var m = String(c.name).match(/^\((주간|야간|주말)\)\s*/);
+    var s = parse(c.start), e = parse(c.end);
+    var n = Number(c.applicant) || 0;
+    var st = c.status || (n >= GOAL ? '개강 확정' : '모집 중');
+    var go = st === '개강 확정';
+    var id = MAP[norm(c.name)];
+    return {
+      type: m ? m[1] : '', title: String(c.name).replace(/^\((주간|야간|주말)\)\s*/,''),
+      s: s, e: e, start: c.start, end: c.end, n: n, go: go, st: st,
+      href: id ? DETAIL + String(id).padStart(2,'0') + '.html' : '',
+      key: (s ? s.getTime() : 9e15)
+    };
+  }
+
+  function render(){
+    var q = state.q.trim().toLowerCase().replace(/\s+/g,'');
+    var rows = state.rows.filter(function(r){
+      if (state.type && r.type !== state.type) return false;
+      if (state.onlyGo && !r.go) return false;
+      if (q && r.title.toLowerCase().replace(/\s+/g,'').indexOf(q) < 0) return false;
+      return true;
+    });
+    $('count').textContent = '과정 ' + rows.length + '개' + (rows.length !== state.rows.length ? ' (전체 ' + state.rows.length + '개 중)' : '');
+    var list = $('list');
+    list.setAttribute('aria-busy','false');
+    if (!rows.length){ list.innerHTML = '<li class="empty">조건에 맞는 과정이 없습니다.</li>'; return; }
+    list.innerHTML = rows.map(function(r){
+      var when = r.s ? '<b>' + md(r.s) + '</b>' + (r.e && r.e.getTime() !== r.s.getTime() ? '<span>~ ' + md(r.e) + '</span>' : '<span>하루 과정</span>')
+                     : '<b>' + esc(r.start || '일정 미정') + '</b>';
+      var tag = r.type ? '<span class="tag ' + (r.type==='야간'?'n':r.type==='주말'?'w':'') + '">' + r.type + '</span>' : '';
+      var name = r.href
+        ? '<a href="' + r.href + '" target="_blank" rel="noopener">' + esc(r.title) + '<span class="arr" aria-hidden="true">↗</span></a>'
+        : '<span class="plain">' + esc(r.title) + '</span>';
+      var pct = Math.min(100, Math.round(r.n / GOAL * 100));
+      var need = (r.go || r.st !== '모집 중' || r.n >= GOAL) ? '' : '<div class="need">' + (GOAL - r.n) + '명 더 신청하면 개강</div>';
+      return '<li class="row' + (r.go ? ' go' : '') + '">' +
+        '<div class="when">' + when + '</div>' +
+        '<div class="name">' + tag + name + '</div>' +
+        '<div class="meter"><div class="num"><span>신청</span><span><b>' + r.n + '</b> / ' + GOAL + '명</span></div>' +
+          '<div class="bar" role="img" aria-label="신청 ' + r.n + '명, 개강 기준 ' + GOAL + '명"><i style="width:' + pct + '%"></i></div>' + need + '</div>' +
+        '<div class="status"><span class="pill' + (r.st === '모집 예정' ? ' soon' : '') + '">' + esc(r.st) + '</span></div>' +
+      '</li>';
+    }).join('');
+  }
+
+  function apply(data, fromCache){
+    state.rows = (data.courses || []).map(prep)
+      .filter(function(r){ var t = new Date(); t.setHours(0,0,0,0); return !r.s || r.s >= t; })
+      .sort(function(a,b){ return a.key - b.key; });
+    var go = state.rows.filter(function(r){ return r.go; }).length;
+    $('sGo').textContent = go + '개';
+    $('sOpen').textContent = (state.rows.length - go) + '개';
+    if (data.generatedAt){
+      var g = new Date(data.generatedAt);
+      if (!isNaN(g)) $('sAt').textContent = (g.getMonth()+1) + '.' + g.getDate() + ' ' + String(g.getHours()).padStart(2,'0') + ':' + String(g.getMinutes()).padStart(2,'0') + ' 조회';
+    }
+    $('note').textContent = fromCache ? '최신 정보를 불러오는 중…' : '';
+    $('note').className = '';
+    render();
+  }
+
+  // 1) 이 브라우저에 지난번 데이터가 있으면 즉시 표시
+  var cached = null;
+  try { cached = JSON.parse(localStorage.getItem(LS) || 'null'); } catch(e){}
+  if (cached && cached.courses) apply(cached, true);
+
+  // 2) 최신 데이터 요청
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var timer = setTimeout(function(){ if (ctrl) ctrl.abort(); }, 15000);
+  fetch(API, ctrl ? { signal: ctrl.signal } : {})
+    .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(data){
+      clearTimeout(timer);
+      if (!data || !Array.isArray(data.courses)) throw new Error('bad data');
+      apply(data, false);
+      try { localStorage.setItem(LS, JSON.stringify(data)); } catch(e){}
+    })
+    .catch(function(){
+      clearTimeout(timer);
+      if (cached && cached.courses){
+        $('note').textContent = '최신 정보를 불러오지 못해 이전에 조회한 내용을 보여 드립니다.';
+        $('note').className = 'warn';
+      } else {
+        $('list').setAttribute('aria-busy','false');
+        $('list').innerHTML = '<li class="empty">신청인원을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</li>';
+      }
+    });
+
+  // 검색·필터
+  $('q').addEventListener('input', function(e){ state.q = e.target.value; render(); });
+  Array.prototype.forEach.call(document.querySelectorAll('.chip[data-type]'), function(b){
+    b.addEventListener('click', function(){
+      state.type = b.getAttribute('data-type');
+      Array.prototype.forEach.call(document.querySelectorAll('.chip[data-type]'), function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      render();
+    });
+  });
+  $('onlyGo').addEventListener('click', function(){
+    state.onlyGo = !state.onlyGo;
+    this.setAttribute('aria-pressed', state.onlyGo ? 'true' : 'false');
+    render();
+  });
+})();
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@
  * 화면은 GitHub Pages(https://ktdscon.github.io/headcount/)가 맡고,
  * 이 스크립트는 시트 값을 JSON으로만 내려준다.
  *   - ?format=json  → 과정 목록 JSON (10분 캐시)
- *   - 그 외         → 새 화면 주소로 안내하는 가벼운 페이지 (예전 /exec 링크 대비)
+ *   - 그 외         → GitHub와 같은 화면(index.html = AppsScript_index.html, 데이터 미리 포함)
  *
  * 시트 구조(기존과 동일, 4행부터 데이터):
  *   D열 상태(모집중/개강/폐강/완료 등)  F열 신청현황  G열 교육시작일  H열 교육수료일  K열 과정명
@@ -20,14 +20,13 @@ function doGet(e) {
     return ContentService.createTextOutput(getJson_())
       .setMimeType(ContentService.MimeType.JSON);
   }
-  return HtmlService.createHtmlOutput(
-    '<base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1">' +
-    '<div style="font-family:sans-serif;text-align:center;padding:48px 16px">' +
-    '<p style="font-size:17px;margin:0 0 20px">신청인원 현황 페이지 주소가 바뀌었습니다.</p>' +
-    '<a href="' + PAGE_URL + '" style="display:inline-block;background:#E5002B;color:#fff;' +
-    'padding:13px 24px;border-radius:6px;font-weight:700;text-decoration:none">현황 페이지 열기</a></div>'
-  ).setTitle('kt ds 컨소시엄 교육 신청인원 현황 조회')
-   .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  // 기존 /exec 주소: GitHub 화면과 같은 화면을 데이터를 미리 넣어서 보여 준다
+  var t = HtmlService.createTemplateFromFile('index');
+  t.json = getJson_().replace(/</g, '\\u003c');
+  return t.evaluate()
+    .setTitle('교육 신청인원 현황 | kt ds 컨소시엄')
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
 function getJson_() {

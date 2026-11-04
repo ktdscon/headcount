@@ -146,6 +146,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
   var DETAIL = 'https://ktdscon.github.io/edu/courses/course-';
   var GOAL = 10;
   var MAP = {"geminiantigravity로시작하는바이브코딩":1,"langchain과streamlit을활용한실무rag애플리케이션개발":2,"langgraph기반에이전트및고급rag":3,"notebooklm실무마스터과정지식관리에서콘텐츠자동화까지":4,"openclawaiagent실무자동화마스터과정aiagent구축에서업무자동화시스템까지":5,"vscode로시작하는바이브코딩":6,"n8n기반업무자동화워크플로우구축실무":7,"바이브코딩withgeminicli":8,"생성형ai고급활용및agentai구현하기":9,"최신ai개발환경에서배우는커서바이브코딩입문":10,"ai와대화하기업무효율향상을위한chatgpt활용기초":11,"chatgpt를활용한생성형ai실전활용업무변화":12,"커서cursor로시작하는vibe코딩":13,"msa클라우드배포및운영":14,"springcloud를활용한msa구축기본":15,"springcloud를활용한msa구축활용":16,"tdd로완성하는springbootrestapi":17,"리액트기반실전프론트엔드개발":18,"비개발자를위한gitgithub입문과배포":19,"실무리팩토링과javaannotation개발활용":20,"flutter를사용한크로스플랫폼앱개발기초":21,"nextjs풀스택애플리케이션실전개발":22,"reactjs를이용한spa개발":23,"vue3프론트엔드애플리케이션구축실무":24,"스프링부트restapi서비스개발":25,"스프링전자정부프레임워크실무워크샵":26,"아이디어를현실로노코드툴을이용한웹사이트개발기본":27,"아이디어를현실로노코드툴을이용한웹사이트개발심화":28,"자바프로그래밍마스터":29,"자바로구현하는리액티브프로그래밍과람다표현식":30,"자바를이용한프로그래밍실무":31,"최신reactjs로구현하는프론트엔드애플리케이션개발":32,"프론트엔드클래스html과css로웹개발시작하기":33,"15시간완성누구나할수있는azureai핵심실습":34,"ai활용을위한azure운영마스터하기azure기본":35,"azureappservice및virtualnetwork활용":36,"azure네트워크인프라구축기초부터실무중심의설계와운영":37,"dockerkubernetes클라우드아키텍처와운영":38,"실전으로배우는리눅스입문과활용":39,"ai활용을위한azure운영마스터하기cloud에서ai까지":40,"docker클라우드컨테이너기반아키텍처이해와실습":41,"kubernetes운영과활용":42,"linux클라우드시스템":43,"리눅스쉘스크립트프로그래밍":44,"postgresqlppas실무적용":45,"성능을고려하는최적의sql작성튜닝part1":46,"성능을고려하는최적의sql작성튜닝part2":47,"오라클데이터베이스sql19c실무":48,"llm과파이썬을이용한데이터분석과정":49,"mysql전문가과정입문에서실무까지":50,"데이터베이스분석설계모델링":51,"오라클sqld개발자과정실무":52,"오라클sqld개발자과정입문":53,"ai의ai에의한품질과테스트":54,"ito품질관리베이직":55,"springboot웹해킹과방어owasptop10으로배우는springboot":56,"개발자를위한보안실무기초":57,"개발자를위한보안실무심화":58,"si프로젝트품질과테스트의이해":59,"클라우드보안의정석azure보안아키텍처완성":60,"프로젝트수행을위한si교육":61};
+  var PRE = null; // 기존 /exec 주소(Apps Script)에서는 서버가 데이터를 미리 넣어 줌
   var LS = 'headcount_cache_v2';
   var DOW = ['일','월','화','수','목','금','토'];
 
@@ -219,6 +220,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
     render();
   }
 
+  // 0) Apps Script로 열린 경우: 미리 넣어 준 데이터로 바로 표시하고 끝
+  if (PRE && PRE.courses) { apply(PRE, false); bind(); return; }
+
   // 1) 이 브라우저에 지난번 데이터가 있으면 즉시 표시
   var cached = null;
   try { cached = JSON.parse(localStorage.getItem(LS) || 'null'); } catch(e){}
@@ -246,7 +250,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
       }
     });
 
+  bind();
+
   // 검색·필터
+  function bind(){
   $('q').addEventListener('input', function(e){ state.q = e.target.value; render(); });
   Array.prototype.forEach.call(document.querySelectorAll('.chip[data-type]'), function(b){
     b.addEventListener('click', function(){
@@ -260,6 +267,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
     this.setAttribute('aria-pressed', state.onlyGo ? 'true' : 'false');
     render();
   });
+  }
 })();
 </script>
 </body>

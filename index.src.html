@@ -146,6 +146,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
   var DETAIL = 'https://ktdscon.github.io/edu/courses/course-';
   var GOAL = 10;
   var MAP = __MAP__;
+  var PRE = __PRELOAD__; // 기존 /exec 주소(Apps Script)에서는 서버가 데이터를 미리 넣어 줌
   var LS = 'headcount_cache_v2';
   var DOW = ['일','월','화','수','목','금','토'];
 
@@ -219,6 +220,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
     render();
   }
 
+  // 0) Apps Script로 열린 경우: 미리 넣어 준 데이터로 바로 표시하고 끝
+  if (PRE && PRE.courses) { apply(PRE, false); bind(); return; }
+
   // 1) 이 브라우저에 지난번 데이터가 있으면 즉시 표시
   var cached = null;
   try { cached = JSON.parse(localStorage.getItem(LS) || 'null'); } catch(e){}
@@ -246,7 +250,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
       }
     });
 
+  bind();
+
   // 검색·필터
+  function bind(){
   $('q').addEventListener('input', function(e){ state.q = e.target.value; render(); });
   Array.prototype.forEach.call(document.querySelectorAll('.chip[data-type]'), function(b){
     b.addEventListener('click', function(){
@@ -260,6 +267,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
     this.setAttribute('aria-pressed', state.onlyGo ? 'true' : 'false');
     render();
   });
+  }
 })();
 </script>
 </body>

@@ -11,7 +11,7 @@
  */
 
 var PAGE_URL = 'https://ktdscon.github.io/headcount/';
-var CACHE_KEY = 'headcount_v2';
+var CACHE_KEY = 'headcount_v3';
 var CACHE_SECONDS = 600; // 10분. 시트를 고친 뒤 바로 보이게 하려면 clearCache()를 한 번 실행
 
 function doGet(e) {
@@ -43,11 +43,24 @@ function clearCache() {
   CacheService.getScriptCache().remove(CACHE_KEY);
 }
 
+/** 시트 1~3행에서 홍은리님이 적어 둔 갱신 시간을 찾는다 (표시값 그대로) */
+function findUpdated_(head) {
+  for (var r = 0; r < head.length; r++) {
+    for (var c = 0; c < head[r].length; c++) {
+      var v = String(head[r][c] || '').trim();
+      if (/\d{1,2}\s*[.\/\-월]\s*\d{1,2}/.test(v) && /(갱신|업데이트|기준|update)/i.test(v)) return v;
+    }
+  }
+  return '';
+}
+
 function buildData_() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var tz = Session.getScriptTimeZone() || 'Asia/Seoul';
   var lastRow = sheet.getLastRow();
   var out = { generatedAt: Utilities.formatDate(new Date(), tz, "yyyy-MM-dd'T'HH:mm:ssXXX"), courses: [] };
+  var head = sheet.getRange(1, 1, 3, 11).getDisplayValues();
+  out.sheetUpdated = findUpdated_(head);
   if (lastRow < 4) return out;
 
   var values = sheet.getRange(4, 1, lastRow - 3, 11).getValues();

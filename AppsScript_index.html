@@ -212,9 +212,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #005f
     var go = state.rows.filter(function(r){ return r.go; }).length;
     $('sGo').textContent = go + '개';
     $('sOpen').textContent = (state.rows.length - go) + '개';
-    if (data.generatedAt){
+    // 시트 상단에 적힌 업데이트 일자(예: "업데이트 일자 : 2026.11.04 (11:00)")를 우선 표시
+    var su = String(data.sheetUpdated || '');
+    var sm = su.match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})(?:\D+?(\d{1,2}):(\d{2}))?/);
+    if (sm){
+      var sd = new Date(+sm[1], sm[2]-1, +sm[3]);
+      $('sAt').textContent = (sd.getMonth()+1) + '.' + sd.getDate() + ' (' + DOW[sd.getDay()] + ')' + (sm[4] ? ' ' + String(sm[4]).padStart(2,'0') + ':' + sm[5] : '') + ' 업데이트';
+    } else if (su){
+      $('sAt').textContent = su.replace(/^.*?:\s*/, '');
+    } else if (data.generatedAt){
       var g = new Date(data.generatedAt);
-      if (!isNaN(g)) $('sAt').textContent = (g.getMonth()+1) + '.' + g.getDate() + ' (' + DOW[g.getDay()] + ') ' + String(g.getHours()).padStart(2,'0') + ':' + String(g.getMinutes()).padStart(2,'0') + ' 조회';
+      if (!isNaN(g)) $('sAt').textContent = (g.getMonth()+1) + '.' + g.getDate() + ' (' + DOW[g.getDay()] + ') ' + String(g.getHours()).padStart(2,'0') + ':' + String(g.getMinutes()).padStart(2,'0') + ' 기준';
     }
     $('note').textContent = fromCache ? '최신 정보를 불러오는 중…' : '';
     $('note').className = '';
